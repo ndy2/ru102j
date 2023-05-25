@@ -1,55 +1,52 @@
 <style>
 
 #mapid {
-    height: 900px;
+  height: 900px;
 }
 
 </style>
 
 <template>
 
-<div id="app">
+  <div id="app">
     <div class="container">
       <h1 class="header">Solar Site Map</h1>
     </div>
     <div class="container">
-        <form v-on:submit.prevent="submitForm($event)" id="search" style="margin: 0.5em;">
-            <div class="form-row m-1">
-                <div class="col px-1">
-                    <input id="lat" name="latitude" type="text" class="form-control" placeholder="Latitude">
-                </div>
-                <div class="col px-1">
-                    <input id="lng" name="longitude" type="text" class="form-control" placeholder="Longitude">
-                </div>
-                <div class="col-sm-1 px-1">
-                    <input name="radius" type="text" class="form-control" placeholder="Radius">
-                </div>
-                <div class="col2 px-1">
-                    <select name="radiusUnit" class="custom-select">
-                        <option selected="selected" value="KM">KM (Kilometers)</option>
-                        <option value="MI">MI (Miles)</option>
-                    </select>
-                </div>
-                <div class="col2 px-1 form-check form-check-inline">
-                  <input type="checkbox" name="onlyExcessCapacity" class="form-check-input" id="excessCapacityCheck">
-                  <label class="form-check-label" for="excessCapacityCheck">Excess Capacity</label>
-                </div>
-                <div class="col2 px-1">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </div>
-        </form>
+      <form id="search" style="margin: 0.5em;" v-on:submit.prevent="submitForm($event)">
+        <div class="form-row m-1">
+          <div class="col px-1">
+            <input id="lat" class="form-control" name="latitude" placeholder="Latitude" type="text">
+          </div>
+          <div class="col px-1">
+            <input id="lng" class="form-control" name="longitude" placeholder="Longitude" type="text">
+          </div>
+          <div class="col-sm-1 px-1">
+            <input class="form-control" name="radius" placeholder="Radius" type="text">
+          </div>
+          <div class="col2 px-1">
+            <select class="custom-select" name="radiusUnit">
+              <option selected="selected" value="KM">KM (Kilometers)</option>
+              <option value="MI">MI (Miles)</option>
+            </select>
+          </div>
+          <div class="col2 px-1 form-check form-check-inline">
+            <input id="excessCapacityCheck" class="form-check-input" name="onlyExcessCapacity" type="checkbox">
+            <label class="form-check-label" for="excessCapacityCheck">Excess Capacity</label>
+          </div>
+          <div class="col2 px-1">
+            <button class="btn btn-primary" type="submit">Submit</button>
+          </div>
+        </div>
+      </form>
     </div>
-    <div class="container" id="mapid"></div>
-</div>
+    <div id="mapid" class="container"></div>
+  </div>
 
 </template>
 
 <script>
-import {
-  L, LMap, LTileLayer, LMarker
-}
-  from 'vue2-leaflet'
+import {L, LMap, LMarker, LTileLayer} from 'vue2-leaflet'
 import axios from 'axios'
 
 export default {
@@ -59,12 +56,12 @@ export default {
     LTileLayer,
     LMarker
   },
-  mounted () {
+  mounted() {
     this.createMap()
     this.getData()
   },
   methods: {
-    submitForm (event) {
+    submitForm(event) {
       this.markerLayers.clearLayers()
       console.log(event.srcElement)
 
@@ -90,7 +87,7 @@ export default {
           console.log(error)
         })
     },
-    getData () {
+    getData() {
       var self = this
       axios.get(`${process.env.apiHost}api/sites`)
         .then(function (response) {
@@ -102,16 +99,16 @@ export default {
           console.log(error)
         })
     },
-    addMarker (site) {
+    addMarker(site) {
       const coordinate = site.coordinate
       const marker = L.marker([coordinate.lat, coordinate.lng]).addTo(this.markerLayers)
       marker.bindPopup(`<b>${site.address}</b><br/>${site.city}, ${site.state} ${site.postalCode}<br>(${site.coordinate.lat}, ${site.coordinate.lng})<br/><a href="#/stats/${site.id}">Stats</a>`)
     },
-    createMap () {
+    createMap() {
       this.mymap = L.map('mapid').setView([37.715732, -122.027342], 11)
       this.markerLayers = L.featureGroup().addTo(this.mymap)
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?',
-        { attribution: 'Map and Image data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors. <a href="https://www.openstreetmap.org/copyright">License</a>.' }
+        {attribution: 'Map and Image data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors. <a href="https://www.openstreetmap.org/copyright">License</a>.'}
       ).addTo(this.mymap)
     }
   }

@@ -3,22 +3,24 @@
 
 <template>
 
-<div id="app">
+  <div id="app">
     <div class="container">
       <h1 class="header">Site Capacity</h1>
       <h3 class="header">Top 10 Capacity</h3>
-        <canvas id="maxChart"></canvas>
+      <canvas id="maxChart"></canvas>
     </div>
     <div class="container">
       <table class="table">
         <thead>
-          <tr>
-            <td scope="col">ID</td>
-            <td scope="col">Capacity</td>
-          </tr>
+        <tr>
+          <td scope="col">ID</td>
+          <td scope="col">Capacity</td>
+        </tr>
         </thead>
         <tr v-for="item in capacityTable" :key="item.siteId">
-          <td><router-link :to="{ name: 'stats', params: { id: item.siteId }}">{{ item.siteId }}</router-link></td>
+          <td>
+            <router-link :to="{ name: 'stats', params: { id: item.siteId }}">{{ item.siteId }}</router-link>
+          </td>
           <td>{{ item.capacity }}</td>
         </tr>
       </table>
@@ -26,23 +28,25 @@
 
     <div class="container">
       <h3 class="header" style="margin-top: 1em;">Bottom 10 Capacity</h3>
-        <canvas id="minChart"></canvas>
+      <canvas id="minChart"></canvas>
     </div>
     <div class="container">
       <table class="table">
         <thead>
-          <tr>
-            <td scope="col">ID</td>
-            <td scope="col">Capacity</td>
-          </tr>
+        <tr>
+          <td scope="col">ID</td>
+          <td scope="col">Capacity</td>
+        </tr>
         </thead>
         <tr v-for="item in minCapacityTable" :key="item.siteId">
-          <td><router-link :to="{ name: 'stats', params: { id: item.siteId }}">{{ item.siteId }}</router-link></td>
+          <td>
+            <router-link :to="{ name: 'stats', params: { id: item.siteId }}">{{ item.siteId }}</router-link>
+          </td>
           <td>{{ item.capacity }}</td>
         </tr>
       </table>
     </div>
-</div>
+  </div>
 
 </template>
 
@@ -50,6 +54,7 @@
 
 import axios from 'axios'
 import Chart from 'chart.js'
+
 export default {
   name: 'Chart',
   data: function () {
@@ -58,44 +63,44 @@ export default {
       minCapacityTable: []
     }
   },
-  mounted () {
+  mounted() {
     this.resetColor()
     this.createChart()
     this.getData(this)
   },
   watch: {
-    $route (to, from) {
+    $route(to, from) {
       this.clearChartData(this)
       this.resetColor()
       this.getData(this)
     }
   },
   methods: {
-    resetColor () {
+    resetColor() {
       this.currentColor = {
         r: 66,
         g: 134,
         b: 234
       }
     },
-    cycleRGBColor (color) {
+    cycleRGBColor(color) {
       if (color + 20 <= 255) {
         return color + 20
       } else {
         return 20 + (255 - color)
       }
     },
-    getBorderColor () {
+    getBorderColor() {
       this.currentColor.r = this.cycleRGBColor(this.currentColor.r)
       this.currentColor.g = this.cycleRGBColor(this.currentColor.g)
       this.currentColor.b = this.cycleRGBColor(this.currentColor.b)
       return `rgb(${this.currentColor.r}, ${this.currentColor.g}, ${this.currentColor.b})`
     },
-    clearChartData (self) {
+    clearChartData(self) {
       self.chart.data.datasets = []
       self.chart.update()
     },
-    getData (self) {
+    getData(self) {
       axios.get(`${process.env.apiHost}api/capacity/`)
         .then(function (response) {
           const maxItems = []
@@ -139,7 +144,7 @@ export default {
           console.log(error)
         })
     },
-    createChart () {
+    createChart() {
       const maxCtx = document.getElementById('maxChart').getContext('2d')
       const minCtx = document.getElementById('minChart').getContext('2d')
       this.maxChart = new Chart(maxCtx, {

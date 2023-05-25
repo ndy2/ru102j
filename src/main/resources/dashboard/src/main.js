@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
-import { L, LMap, LTileLayer, LMarker } from 'vue2-leaflet'
+import {L, LMap, LMarker, LTileLayer} from 'vue2-leaflet'
 import 'leaflet/dist/leaflet.css'
 
 Vue.component('l-map', LMap)
@@ -25,6 +25,6 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
-  components: { App },
+  components: {App},
   template: '<App/>'
 })

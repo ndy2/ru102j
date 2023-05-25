@@ -2,18 +2,19 @@
 </style>
 
 <template>
-<div id="app">
+  <div id="app">
     <div class="container">
-        <h1 class="header">Solar Site {{ siteId }}</h1>
-        <canvas id="myChart"></canvas>
+      <h1 class="header">Solar Site {{ siteId }}</h1>
+      <canvas id="myChart"></canvas>
     </div>
-</div>
+  </div>
 </template>
 
 <script>
 
 import axios from 'axios'
 import Chart from 'chart.js'
+
 export default {
   name: 'Chart',
   data: function () {
@@ -21,44 +22,44 @@ export default {
       siteId: null
     }
   },
-  mounted () {
+  mounted() {
     this.resetColor()
     this.createChart()
     this.getData(this)
   },
   watch: {
-    $route (to, from) {
+    $route(to, from) {
       this.clearChartData(this)
       this.resetColor()
       this.getData(this)
     }
   },
   methods: {
-    resetColor () {
+    resetColor() {
       this.currentColor = {
         r: 66,
         g: 134,
         b: 234
       }
     },
-    cycleRGBColor (color) {
+    cycleRGBColor(color) {
       if (color + 20 <= 255) {
         return color + 20
       } else {
         return 20 + (255 - color)
       }
     },
-    getBorderColor () {
+    getBorderColor() {
       this.currentColor.r = this.cycleRGBColor(this.currentColor.r)
       this.currentColor.g = this.cycleRGBColor(this.currentColor.g)
       this.currentColor.b = this.cycleRGBColor(this.currentColor.b)
       return `rgb(${this.currentColor.r}, ${this.currentColor.g}, ${this.currentColor.b})`
     },
-    clearChartData (self) {
+    clearChartData(self) {
       self.chart.data.datasets = []
       self.chart.update()
     },
-    getData (self) {
+    getData(self) {
       axios.get(`${process.env.apiHost}api/metrics/${self.$route.params.id}`)
         .then(function (response) {
           self.siteId = self.$route.params.id
@@ -81,7 +82,7 @@ export default {
           console.log(error)
         })
     },
-    createChart () {
+    createChart() {
       var timeFormat = 'MM/DD/YYYY HH:mm'
       var ctx = document.getElementById('myChart').getContext('2d')
       this.chart = new Chart(ctx, {

@@ -1,12 +1,12 @@
 <template>
   <footer class="footer">
-     <div class="container">
-       <div class="row">
-         <div class="col">
+    <div class="container">
+      <div class="row">
+        <div class="col">
           <p class="text-muted">RU102J: Redis for Java Developers</p></div>
-       </div>
-     </div>
-   </footer>
+      </div>
+    </div>
+  </footer>
 </template>
 
 <script>
@@ -16,9 +16,11 @@
 body {
   margin-bottom: 30px; /* Margin bottom by footer height */
 }
+
 img, p {
-  padding-top:10px;
+  padding-top: 10px;
 }
+
 .footer {
   position: absolute;
   bottom: 0;
